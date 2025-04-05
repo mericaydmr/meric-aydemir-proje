@@ -1,89 +1,64 @@
 import java.util.*;
 
-class SinemaUygulamasi {
+class SinemaSistemi {
 
+    // Film sınıfı
     static class Film {
-        String id;
         String ad;
         int sure;
-        boolean[][] koltuklar = new boolean[5][5]; // 5x5 koltuk
+        String tur;
 
-        public Film(String id, String ad, int sure) {
-            this.id = id;
+        public Film(String ad, int sure, String tur) {
             this.ad = ad;
             this.sure = sure;
+            this.tur = tur;
         }
 
         @Override
         public String toString() {
-            return "🎬 " + id + " - " + ad + " (" + sure + " dk)";
-        }
-
-        public void koltuklariGoster() {
-            System.out.println("\n🎟️ Koltuklar (X=dolu, O=boş):");
-            for (int i = 0; i < 5; i++) {
-                for (int j = 0; j < 5; j++) {
-                    System.out.print(koltuklar[i][j] ? " X " : " O ");
-                }
-                System.out.println(" <- Satır " + (i + 1));
-            }
-            System.out.println(" 1  2  3  4  5 (Sütun)");
-        }
-
-        public boolean koltukMusaitMi(int satir, int sutun) {
-            return !koltuklar[satir][sutun];
-        }
-
-        public void koltukRezerveEt(int satir, int sutun) {
-            koltuklar[satir][sutun] = true;
+            return "🎬 " + ad + " (" + sure + " dk) - Tür: " + tur;
         }
     }
 
+    // Müşteri sınıfı
     static class Musteri {
-        String id;
         String ad;
-        String soyad;
+        String email;
 
-        public Musteri(String id, String ad, String soyad) {
-            this.id = id;
+        public Musteri(String ad, String email) {
             this.ad = ad;
-            this.soyad = soyad;
+            this.email = email;
         }
 
         @Override
         public String toString() {
-            return "👤 " + id + " - " + ad + " " + soyad;
+            return "👤 " + ad + " - " + email;
         }
     }
 
+    // Bilet sınıfı
     static class Bilet {
-        String id;
         Musteri musteri;
         Film film;
-        int satir;
-        int sutun;
 
-        public Bilet(String id, Musteri musteri, Film film, int satir, int sutun) {
-            this.id = id;
+        public Bilet(Musteri musteri, Film film) {
             this.musteri = musteri;
             this.film = film;
-            this.satir = satir;
-            this.sutun = sutun;
         }
 
         @Override
         public String toString() {
-            return "🎟️ " + id + " - " + musteri.ad + " " + musteri.soyad +
-                    " --> " + film.ad + " (Koltuk: " + (satir + 1) + "." + (sutun + 1) + ")";
+            return "🎟️ " + musteri.ad + " - " + film.ad + " (" + film.sure + " dk)";
         }
     }
 
-    static ArrayList<Film> filmler = new ArrayList<>();
-    static ArrayList<Musteri> musteriler = new ArrayList<>();
-    static ArrayList<Bilet> biletler = new ArrayList<>();
-    static int filmSayac = 1;
-    static int musteriSayac = 1;
-    static int biletSayac = 1;
+    // Film, Müşteri ve Bilet listeleri
+    static Film[] filmler = new Film[10]; // Maksimum 10 film
+    static Musteri[] musteriler = new Musteri[20]; // Maksimum 20 müşteri
+    static Bilet[] biletler = new Bilet[20]; // Maksimum 20 bilet
+    static int filmSayac = 0;
+    static int musteriSayac = 0;
+    static int biletSayac = 0;
 
     static Scanner scanner = new Scanner(System.in);
 
@@ -96,7 +71,7 @@ class SinemaUygulamasi {
             System.out.println("2. Film Listele");
             System.out.println("3. Müşteri Ekle");
             System.out.println("4. Müşteri Listele");
-            System.out.println("5. Bilet Oluştur (Koltuklu)");
+            System.out.println("5. Bilet Oluştur");
             System.out.println("6. Bilet Listele");
             System.out.println("0. Çıkış");
             System.out.print("Seçiminiz: ");
@@ -116,104 +91,112 @@ class SinemaUygulamasi {
     }
 
     static void filmEkle() {
+        if (filmSayac >= 10) {
+            System.out.println("⚠️ Maksimum film sayısına ulaşıldı!");
+            return;
+        }
+
         System.out.print("Film adı: ");
         String ad = scanner.nextLine();
         System.out.print("Film süresi (dk): ");
         int sure = Integer.parseInt(scanner.nextLine());
+        System.out.print("Film türü: ");
+        String tur = scanner.nextLine();
 
-        String id = "F" + filmSayac++;
-        filmler.add(new Film(id, ad, sure));
+        filmler[filmSayac++] = new Film(ad, sure, tur);
         System.out.println("✅ Film eklendi: " + ad);
     }
 
     static void filmListele() {
-        if (filmler.isEmpty()) {
+        if (filmSayac == 0) {
             System.out.println("⚠️ Hiç film yok.");
             return;
         }
-        for (Film f : filmler) {
-            System.out.println(f);
+        System.out.println("🎞️ Film Listesi:");
+        for (int i = 0; i < filmSayac; i++) {
+            System.out.println(filmler[i]);
         }
     }
 
     static void musteriEkle() {
+        if (musteriSayac >= 20) {
+            System.out.println("⚠️ Maksimum müşteri sayısına ulaşıldı!");
+            return;
+        }
+
         System.out.print("Müşteri adı: ");
         String ad = scanner.nextLine();
-        System.out.print("Müşteri soyadı: ");
-        String soyad = scanner.nextLine();
+        System.out.print("Müşteri email: ");
+        String email = scanner.nextLine();
 
-        String id = "M" + musteriSayac++;
-        musteriler.add(new Musteri(id, ad, soyad));
-        System.out.println("✅ Müşteri eklendi.");
+        musteriler[musteriSayac++] = new Musteri(ad, email);
+        System.out.println("✅ Müşteri eklendi: " + ad);
     }
 
     static void musteriListele() {
-        if (musteriler.isEmpty()) {
+        if (musteriSayac == 0) {
             System.out.println("⚠️ Hiç müşteri yok.");
             return;
         }
-        for (Musteri m : musteriler) {
-            System.out.println(m);
+        System.out.println("👤 Müşteri Listesi:");
+        for (int i = 0; i < musteriSayac; i++) {
+            System.out.println(musteriler[i]);
         }
     }
 
     static void biletOlustur() {
-        if (filmler.isEmpty() || musteriler.isEmpty()) {
-            System.out.println("⚠️ Önce müşteri ve film eklemelisiniz.");
+        if (filmSayac == 0 || musteriSayac == 0) {
+            System.out.println("⚠️ Önce film ve müşteri eklemelisiniz.");
             return;
         }
 
         System.out.print("Müşteri ID: ");
         String mid = scanner.nextLine();
-        Musteri musteri = musteriler.stream()
-                .filter(m -> m.id.equalsIgnoreCase(mid))
-                .findFirst().orElse(null);
+        Musteri musteri = null;
+        for (int i = 0; i < musteriSayac; i++) {
+            if (musteriler[i].email.equals(mid)) {
+                musteri = musteriler[i];
+                break;
+            }
+        }
 
-        System.out.print("Film ID: ");
-        String fid = scanner.nextLine();
-        Film film = filmler.stream()
-                .filter(f -> f.id.equalsIgnoreCase(fid))
-                .findFirst().orElse(null);
-
-        if (musteri == null || film == null) {
-            System.out.println("❌ Müşteri veya film bulunamadı.");
+        if (musteri == null) {
+            System.out.println("❌ Müşteri bulunamadı.");
             return;
         }
 
-        film.koltuklariGoster();
-
-        int satir, sutun;
-        while (true) {
-            System.out.print("Satır (1-5): ");
-            satir = Integer.parseInt(scanner.nextLine()) - 1;
-            System.out.print("Sütun (1-5): ");
-            sutun = Integer.parseInt(scanner.nextLine()) - 1;
-
-            if (satir < 0 || satir >= 5 || sutun < 0 || sutun >= 5) {
-                System.out.println("❗ Geçersiz koltuk.");
-                continue;
-            }
-
-            if (film.koltukMusaitMi(satir, sutun)) {
-                film.koltukRezerveEt(satir, sutun);
+        System.out.print("Film ID: ");
+        String fid = scanner.nextLine();
+        Film film = null;
+        for (int i = 0; i < filmSayac; i++) {
+            if (filmler[i].ad.equals(fid)) {
+                film = filmler[i];
                 break;
-            } else {
-                System.out.println("❌ Bu koltuk dolu, başka seçin.");
             }
         }
 
-        String bid = "B" + biletSayac++;
-        biletler.add(new Bilet(bid, musteri, film, satir, sutun));
+        if (film == null) {
+            System.out.println("❌ Film bulunamadı.");
+            return;
+        }
+
+        if (biletSayac >= 20) {
+            System.out.println("⚠️ Maksimum bilet sayısına ulaşıldı!");
+            return;
+        }
+
+        biletler[biletSayac++] = new Bilet(musteri, film);
         System.out.println("✅ Bilet başarıyla oluşturuldu.");
     }
 
     static void biletListele() {
-        if (biletler.isEmpty()) {
-            System.out.println("⚠️ Henüz hiç bilet yok.");
+        if (biletSayac == 0) {
+            System.out.println("⚠️ Hiç bilet yok.");
             return;
         }
-        for (Bilet b : biletler) {
-            System.out.println(b);
+        System.out.println("🎟️ Bilet Listesi:");
+        for (int i = 0; i < biletSayac; i++) {
+            System.out.println(biletler[i]);
         }
     }
 }
