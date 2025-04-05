@@ -2,7 +2,7 @@ import java.util.*;
 
 class SinemaSistemi {
 
-    // Film sınıfı
+
     static class Film {
         String ad;
         int sure;
@@ -20,7 +20,7 @@ class SinemaSistemi {
         }
     }
 
-    // Müşteri sınıfı
+
     static class Musteri {
         String ad;
         String email;
@@ -36,7 +36,7 @@ class SinemaSistemi {
         }
     }
 
-    // Bilet sınıfı
+
     static class Bilet {
         Musteri musteri;
         Film film;
@@ -48,11 +48,11 @@ class SinemaSistemi {
 
         @Override
         public String toString() {
-            return "🎟️ " + musteri.ad + " - " + film.ad + " (" + film.sure + " dk)";
+            return " " + musteri.ad + " - " + film.ad + " (" + film.sure + " dk)";
         }
     }
 
-    // Film, Müşteri ve Bilet listeleri
+
     static Film[] filmler = new Film[10]; // Maksimum 10 film
     static Musteri[] musteriler = new Musteri[20]; // Maksimum 20 müşteri
     static Bilet[] biletler = new Bilet[20]; // Maksimum 20 bilet
@@ -66,7 +66,7 @@ class SinemaSistemi {
         int secim;
 
         do {
-            System.out.println("\n🎞️ === SİNEMA SİSTEMİ ===");
+            System.out.println("\n === SİNEMA SİSTEMİ ===");
             System.out.println("1. Film Ekle");
             System.out.println("2. Film Listele");
             System.out.println("3. Müşteri Ekle");
@@ -84,15 +84,15 @@ class SinemaSistemi {
                 case 4 -> musteriListele();
                 case 5 -> biletOlustur();
                 case 6 -> biletListele();
-                case 0 -> System.out.println("👋 Programdan çıkılıyor...");
-                default -> System.out.println("❗ Geçersiz seçim.");
+                case 0 -> System.out.println(" Programdan çıkılıyor...");
+                default -> System.out.println(" Geçersiz seçim.");
             }
         } while (secim != 0);
     }
 
     static void filmEkle() {
         if (filmSayac >= 10) {
-            System.out.println("⚠️ Maksimum film sayısına ulaşıldı!");
+            System.out.println(" Maksimum film sayısına ulaşıldı!");
             return;
         }
 
@@ -104,15 +104,15 @@ class SinemaSistemi {
         String tur = scanner.nextLine();
 
         filmler[filmSayac++] = new Film(ad, sure, tur);
-        System.out.println("✅ Film eklendi: " + ad);
+        System.out.println(" Film eklendi: " + ad);
     }
 
     static void filmListele() {
         if (filmSayac == 0) {
-            System.out.println("⚠️ Hiç film yok.");
+            System.out.println(" Hiç film yok.");
             return;
         }
-        System.out.println("🎞️ Film Listesi:");
+        System.out.println(" Film Listesi:");
         for (int i = 0; i < filmSayac; i++) {
             System.out.println(filmler[i]);
         }
@@ -120,7 +120,7 @@ class SinemaSistemi {
 
     static void musteriEkle() {
         if (musteriSayac >= 20) {
-            System.out.println("⚠️ Maksimum müşteri sayısına ulaşıldı!");
+            System.out.println("Maksimum müşteri sayısına ulaşıldı!");
             return;
         }
 
@@ -130,15 +130,15 @@ class SinemaSistemi {
         String email = scanner.nextLine();
 
         musteriler[musteriSayac++] = new Musteri(ad, email);
-        System.out.println("✅ Müşteri eklendi: " + ad);
+        System.out.println(" Müşteri eklendi: " + ad);
     }
 
     static void musteriListele() {
         if (musteriSayac == 0) {
-            System.out.println("⚠️ Hiç müşteri yok.");
+            System.out.println(" Hiç müşteri yok.");
             return;
         }
-        System.out.println("👤 Müşteri Listesi:");
+        System.out.println(" Müşteri Listesi:");
         for (int i = 0; i < musteriSayac; i++) {
             System.out.println(musteriler[i]);
         }
@@ -146,7 +146,7 @@ class SinemaSistemi {
 
     static void biletOlustur() {
         if (filmSayac == 0 || musteriSayac == 0) {
-            System.out.println("⚠️ Önce film ve müşteri eklemelisiniz.");
+            System.out.println(" Önce film ve müşteri eklemelisiniz.");
             return;
         }
 
@@ -161,7 +161,7 @@ class SinemaSistemi {
         }
 
         if (musteri == null) {
-            System.out.println("❌ Müşteri bulunamadı.");
+            System.out.println(" Müşteri bulunamadı.");
             return;
         }
 
@@ -176,25 +176,25 @@ class SinemaSistemi {
         }
 
         if (film == null) {
-            System.out.println("❌ Film bulunamadı.");
+            System.out.println(" Film bulunamadı.");
             return;
         }
 
         if (biletSayac >= 20) {
-            System.out.println("⚠️ Maksimum bilet sayısına ulaşıldı!");
+            System.out.println(" Maksimum bilet sayısına ulaşıldı!");
             return;
         }
 
         biletler[biletSayac++] = new Bilet(musteri, film);
-        System.out.println("✅ Bilet başarıyla oluşturuldu.");
+        System.out.println(" Bilet başarıyla oluşturuldu.");
     }
 
     static void biletListele() {
         if (biletSayac == 0) {
-            System.out.println("⚠️ Hiç bilet yok.");
+            System.out.println(" Hiç bilet yok.");
             return;
         }
-        System.out.println("🎟️ Bilet Listesi:");
+        System.out.println(" Bilet Listesi:");
         for (int i = 0; i < biletSayac; i++) {
             System.out.println(biletler[i]);
         }
